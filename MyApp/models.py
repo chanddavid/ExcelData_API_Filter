@@ -8,23 +8,25 @@ class ExcelData(models.Model):
     province = models.CharField(max_length=200)
     district = models.CharField(max_length=200)
     municipality = models.CharField(max_length=200)
-    project_title = models.CharField(max_length=200, unique=True)
+    project_title = models.CharField(max_length=200)
     project_status = models.CharField(max_length=200)
     donar = models.CharField(max_length=200)
     executing_agency = models.CharField(max_length=200)
-    implementing_partner = models.CharField(max_length=200, unique=True)
+    implementing_partner = models.CharField(max_length=200)
     counterpart_ministry = models.CharField(max_length=200)
     type_of_assistance_code = models.IntegerField()
     budget_type = models.CharField(max_length=200)
     humanitarian = models.CharField(max_length=200)
-    sector_name = models.CharField(max_length=200, unique=True)
+    sector_name = models.CharField(max_length=200)
     sector_code = models.IntegerField()
     commitments = models.IntegerField()
     Aggrement_date = models.DateTimeField()
     date_of_effectiveness = models.DateTimeField()
 
     def __str__(self):
-        return str(self.location_id)
+        return str(self.id)
+
+
 
 
 

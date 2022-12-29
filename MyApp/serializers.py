@@ -8,6 +8,7 @@ class ExcelDataSerializer(serializers.ModelSerializer):
         model = ExcelData
         fields = '__all__'
 
+
 # class LocationSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Location
