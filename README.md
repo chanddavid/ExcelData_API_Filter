@@ -69,6 +69,8 @@ district wise). Apply province and district filters too
  
 # Solution
 
+I used single model in this project,for easy purpose. I have commented multiple models part in the project because it is time consuming but takes less memory than single model.
+
 1.  Excel file data is uploaded into database. use  api/post/ link
 
 2.  Screenshot is not fully covered
