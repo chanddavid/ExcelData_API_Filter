@@ -62,3 +62,20 @@ district wise). Apply province and district filters too
     }
     ]
     
+# Solution
+
+1.  Excel file data is uploaded into database. use  api/post/ link
+
+2.  Screenshot is not fully covered
+
+    ![image](https://user-images.githubusercontent.com/61791226/210054415-cca78958-5364-4554-98a7-7ffe3d73bcd3.png)
+    )
+
+3.  screenshot  
+
+    ![image](https://user-images.githubusercontent.com/61791226/210054471-cb63ab88-167d-4191-a772-8bf278636a5d.png)
+
+4.  screenshot is not fully covered
+
+    ![image](https://user-images.githubusercontent.com/61791226/210054542-02b179d6-37fb-4707-92c1-2a9353a56a84.png)
+
