@@ -13,12 +13,13 @@ import json
 from django.db.models import Q
 
 
-
 class DataView(APIView):
     def get(self, request, id=None):
         pass
 
     def post(self, request):
+        """This Api is helps to post the Excel data Into database,Here i used Pandas to read excel data
+        """
         data = request.data
 
         dataframe1 = pd.read_excel(data['filename'], header=[0])
@@ -46,11 +47,12 @@ class DataView(APIView):
 
     def delete(self, request, id=None):
         pass
-# {"sector_name": "Health", "counterpart_ministry": "Ministry of Finance\u00a0", "project_status": "On-Going"}
 
 
 class GetProjectFilter(APIView):
     def get(self, request):
+        """This Api helps to Filter the data with sectorname,counterpart_minister and Project status
+        """
         data = request.data
 
         def remove_empty_values(dictionary):
@@ -76,6 +78,14 @@ class GetSectorFilter(APIView):
         data1 = serializer.data
 
         def getprojectcount(data1):
+            """This method helps to count the total number of project in a Database
+
+            Args:
+                data1 (Queryset): database
+
+            Returns:
+                int: integer value
+            """
             lst1 = []
             for i in range(len(data1)):
                 lst1.append(data1[i]["project_title"])
@@ -84,6 +94,14 @@ class GetSectorFilter(APIView):
         count = getprojectcount(data1)
 
         def gettotalbudget(data1):
+            """Helps to get the total budget count in dataset
+
+            Args:
+                data1 (Queryset): database
+
+            Returns:
+                int: integer value
+            """
             sum = 0
             for i in range(len(data1)):
                 sum = sum+(data1[i]["commitments"])
@@ -92,6 +110,11 @@ class GetSectorFilter(APIView):
         total_budget = gettotalbudget(data1)
 
         def getsector():
+            """This method helps to aggregate the specific column
+
+            Returns:
+                _type_: sector wise project count and budget
+            """
             sector_projects = ExcelData.objects.values(
                 'sector_code', 'sector_name').annotate(count=Count('project_title'), budget=Sum('commitments'))
             return sector_projects
@@ -107,39 +130,30 @@ class GetProjectBudget(APIView):
         data1 = ExcelData.objects.values(
             'district').annotate(count=Count('project_title'), budget=Sum('commitments'))
 
-        lst2=[]
-        lst3=[]
-        def Convert(data,lst):
+        lst2 = []
+        lst3 = []
+
+        def Convert(data, lst):
+            """this method helps to get the municipality wise and district wise data with specific fields
+
+            Args:
+                data (Queryset): filtered result
+                lst (list): list of dict
+
+            Returns:
+                _type_: new list with key,value of id  and filtered data
+            """
             for i in range(len(data)):
-                x=data[i]
+                x = data[i]
                 lst.append(x)
             for i, d in enumerate(lst):
                 lst[i] = {'id': i, **d}
             return lst
 
-        res=Convert(data,lst2)
-        res1=Convert(data1,lst3)
-        # for i, d in enumerate(data1):
-        #             data1[i] = {'id': i, **d}
+        res = Convert(data, lst2)
+        res1 = Convert(data1, lst3)
 
         return Response({"Municipality Wise": res, "District Wise": res1}, status=status.HTTP_200_OK)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # from .models import Location, Project, Helper, Doner, Budget, Sector
