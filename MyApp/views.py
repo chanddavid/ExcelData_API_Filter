@@ -8,9 +8,10 @@ from django.db import IntegrityError
 
 from .models import ExcelData
 from .serializers import ExcelDataSerializer
-
+from django.db.models import Sum, Count
 import json
 from django.db.models import Q
+
 
 
 class DataView(APIView):
@@ -72,9 +73,73 @@ class GetSectorFilter(APIView):
     def get(self, request):
         data = ExcelData.objects.all()
         serializer = ExcelDataSerializer(data, many=True)
-        data1 = json.dumps(serializer.data)
-        print(data1)
-        return Response({"msg": serializer.data}, status=status.HTTP_201_CREATED)
+        data1 = serializer.data
+
+        def getprojectcount(data1):
+            lst1 = []
+            for i in range(len(data1)):
+                lst1.append(data1[i]["project_title"])
+            count = set(lst1)
+            return len(count)
+        count = getprojectcount(data1)
+
+        def gettotalbudget(data1):
+            sum = 0
+            for i in range(len(data1)):
+                sum = sum+(data1[i]["commitments"])
+            return sum
+
+        total_budget = gettotalbudget(data1)
+
+        def getsector():
+            sector_projects = ExcelData.objects.values(
+                'sector_code', 'sector_name').annotate(count=Count('project_title'), budget=Sum('commitments'))
+            return sector_projects
+        sector = getsector()
+
+        return Response({"project_count": count, "total_budget": total_budget, "sector": sector}, status=status.HTTP_200_OK)
+
+
+class GetProjectBudget(APIView):
+    def get(self, request):
+        data = ExcelData.objects.values(
+            'municipality').annotate(count=Count('project_title'), budget=Sum('commitments'))
+        data1 = ExcelData.objects.values(
+            'district').annotate(count=Count('project_title'), budget=Sum('commitments'))
+
+        lst2=[]
+        lst3=[]
+        def Convert(data,lst):
+            for i in range(len(data)):
+                x=data[i]
+                lst.append(x)
+            for i, d in enumerate(lst):
+                lst[i] = {'id': i, **d}
+            return lst
+
+        res=Convert(data,lst2)
+        res1=Convert(data1,lst3)
+        # for i, d in enumerate(data1):
+        #             data1[i] = {'id': i, **d}
+
+        return Response({"Municipality Wise": res, "District Wise": res1}, status=status.HTTP_200_OK)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # from .models import Location, Project, Helper, Doner, Budget, Sector
