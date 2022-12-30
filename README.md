@@ -1,3 +1,8 @@
+# NOTE
+The final branch is <b>admin</b> branch and Environment is <b>env</b> and install all the package from <b>requirements.txt</b>
+
+
+
 # ExcelData_API_Filter
 
 This is the Given [Dataset](https://docs.google.com/spreadsheets/d/1z9ioyt1v-BtpOn7BK8WGL76zuO9UKJWQ0G-tiS-_zvg/edit#gid=0) that we need to Normalize into  database Table.
@@ -61,7 +66,7 @@ district wise). Apply province and district filters too
     "budget":12344
     }
     ]
-    
+ 
 # Solution
 
 1.  Excel file data is uploaded into database. use  api/post/ link
